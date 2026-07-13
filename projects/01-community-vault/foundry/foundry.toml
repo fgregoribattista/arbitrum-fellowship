@@ -12,4 +12,4 @@ forge-std = "1.9.6"
 arbitrum_sepolia = "https://sepolia-rollup.arbitrum.io/rpc"
 
 [etherscan]
-arbitrum_sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api-sepolia.arbiscan.io/api" }
+arbitrum_sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/v2/api?chainid=421614" }
