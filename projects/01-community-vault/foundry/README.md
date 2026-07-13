@@ -44,18 +44,22 @@ Test naming conventions:
 forge coverage
 ```
 
+## Environment setup
+Copy the environment template, fill in your private key and the etherscan api key (for validate contract):
+
+```bash
+cp .env.example .env
+source .env
+```
+
 ## Deploy — local (Anvil)
 
-1. Start Anvil in a separate terminal:
+1. Set the [Environment](#environment-setup)
+
+2. Start Anvil in a separate terminal:
 
 ```bash
 anvil
-```
-
-2. Export the first Anvil private key:
-
-```bash
-export PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
 3. Run the deploy script:
@@ -70,11 +74,7 @@ forge script script/CommunityVault.s.sol:CommunityVaultScript \
 
 ## Deploy — Arbitrum Sepolia
 
-1. Export your funded wallet private key:
-
-```bash
-export PRIVATE_KEY=<your_private_key>
-```
+1. Set the [Environment](#environment-setup)
 
 2. Run the deploy script:
 
@@ -82,9 +82,26 @@ export PRIVATE_KEY=<your_private_key>
 forge script script/CommunityVault.s.sol:CommunityVaultScript \
   --rpc-url arbitrum_sepolia \
   --chain-id 421614 \
-  --broadcast
-```
+  --broadcast \
+  --verify
 
+```
 The `arbitrum_sepolia` alias resolves via `foundry.toml` → `[rpc_endpoints]` to `https://sepolia-rollup.arbitrum.io/rpc`.
 
 `HelperConfig` auto-selects the Arbitrum Sepolia config (chain ID 421614): goal 0.01 ether, deadline `block.timestamp + 30 days`.
+
+## Verify
+
+If you like, you can manually verify the contract on any chain (testnet or mainnet):
+
+Sepolia arbitrum example:
+
+```bash
+forge clean
+forge build
+forge verify-contract <address> src/CommunityVault.sol:CommunityVault \
+  --chain-id 421614 \
+  --etherscan-api-key $ETHERSCAN_API_KEY \
+  --verifier-url "https://api.etherscan.io/v2/api?chainid=421614" \
+  --constructor-args $(cast abi-encode "constructor(uint256,uint256,address)" <goal> <deadline> <owner>)
+```
