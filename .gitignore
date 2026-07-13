@@ -5,13 +5,15 @@ node_modules/
 artifacts/
 cache/
 typechain-types/
-ignition/deployments/chain-31337/
+**/ignition/deployments/chain-31337/
 
 # Foundry
 out/
 lib/
 dependencies/
-broadcast/
+# Allow mainnet/testnet broadcast artifacts (exclude local anvil)
+**/broadcast/**/31337/
+**/broadcast/**/31337/**
 
 # Environment
 .env
